@@ -1,0 +1,19 @@
+Get-Process : Cannot find a process with the name "robocopy". Verify the process name and call the cmdlet again.
+At line:1 char:1
++ Get-Process robocopy,powershell,pwsh |
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (robocopy:String) [Get-Process], ProcessCommandException
+    + FullyQualifiedErrorId : NoProcessFoundForGivenName,Microsoft.PowerShell.Commands.GetProcessCommand
+
+Get-Process : Cannot find a process with the name "pwsh". Verify the process name and call the cmdlet again.
+At line:1 char:1
++ Get-Process robocopy,powershell,pwsh |
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (pwsh:String) [Get-Process], ProcessCommandException
+    + FullyQualifiedErrorId : NoProcessFoundForGivenName,Microsoft.PowerShell.Commands.GetProcessCommand
+
+
+Name          Id MemoryMB   CPU
+----          -- --------   ---
+powershell   432   341.55 69.25
+powershell 10184    75.62 1.375
