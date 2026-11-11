@@ -1,5 +1,5 @@
 {
-    "GeneratedAt":  "2026-11-11 21:55:00",
+    "GeneratedAt":  "2026-11-11 22:05:07",
     "Root":  "E:\\Shares\\Data",
     "MaxDepth":  3,
     "Tree":  {
@@ -12,8 +12,21 @@
                  "DirCount":  119,
                  "FailedFiles":  0,
                  "ExitCode":  1,
+                 "DiscoveryExitCode":  1,
+                 "ScanStatus":  "Warning",
+                 "Errors":  [
+                                "Discovery: No subfolders detected. Check raw Robocopy output."
+                            ],
+                 "RawOutput":  {
+
+                               },
                  "Children":  [
 
                               ]
-             }
+             },
+    "Log":  [
+                "2026-11-11 22:05:06 [INFO] Starting scan: E:\\Shares\\Data",
+                "2026-11-11 22:05:06 [INFO] Scanning folder: E:\\Shares\\Data",
+                "2026-11-11 22:05:07 [INFO] Discovering subfolders: E:\\Shares\\Data"
+            ]
 }
