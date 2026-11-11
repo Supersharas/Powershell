@@ -1,14 +1,11 @@
-[DEBUG 22:47:04] BUILDING NODE OBJECT: E:\Shares\Data\Worker Files\Carol M | Working Set: 90.69 MB | Managed Memory: 19.41 MB | CPU: 9.45s
-[DEBUG 22:47:04] NODE OBJECT COMPLETE: E:\Shares\Data\Worker Files\Carol M | Working Set: 90.69 MB | Managed Memory: 19.66 MB | CPU: 9.48s
-[DEBUG 22:47:04] CHILD RETURNED: E:\Shares\Data\Worker Files\Carol M | Working Set: 90.69 MB | Managed Memory: 19.84 MB | CPU: 9.48s
-[DEBUG 22:47:04] CHILD PROCESSING COMPLETE: E:\Shares\Data\Worker Files | Working Set: 90.69 MB | Managed Memory: 20 MB | CPU: 9.48s
-[DEBUG 22:47:04] BUILDING NODE OBJECT: E:\Shares\Data\Worker Files | Working Set: 90.69 MB | Managed Memory: 20.21 MB | CPU: 9.48s
-[DEBUG 22:47:04] NODE OBJECT COMPLETE: E:\Shares\Data\Worker Files | Working Set: 90.71 MB | Managed Memory: 10.97 MB | CPU: 9.5s
-[DEBUG 22:47:04] CHILD RETURNED: E:\Shares\Data\Worker Files | Working Set: 90.71 MB | Managed Memory: 11.15 MB | CPU: 9.52s
-[DEBUG 22:47:04] CHILD PROCESSING COMPLETE: E:\Shares\Data | Working Set: 90.71 MB | Managed Memory: 11.31 MB | CPU: 9.52s
-[DEBUG 22:47:04] BUILDING NODE OBJECT: E:\Shares\Data | Working Set: 90.71 MB | Managed Memory: 11.53 MB | CPU: 9.53s
-[DEBUG 22:47:04] NODE OBJECT COMPLETE: E:\Shares\Data | Working Set: 90.71 MB | Managed Memory: 12.16 MB | CPU: 9.55s
-[DEBUG 22:47:04] ROOT SCAN RETURNED | Working Set: 90.71 MB | Managed Memory: 12.34 MB | CPU: 9.56s
-[DEBUG 22:47:04] BUILDING FINAL REPORT OBJECT | Working Set: 90.71 MB | Managed Memory: 12.5 MB | CPU: 9.58s
-[DEBUG 22:47:04] FINAL REPORT OBJECT COMPLETE | Working Set: 90.75 MB | Managed Memory: 12.92 MB | CPU: 9.59s
-[DEBUG 22:47:04] STARTING JSON CONVERSION | Working Set: 90.76 MB | Managed Memory: 13.17 MB | CPU: 9.61s
+[DEBUG 22:55:45] CHILD RETURNED: E:\Shares\Data\Worker Files | Working Set: 90.16 MB | Managed Memory: 9.92 MB | CPU: 10.61 s | Elapsed: 31.65 s
+[DEBUG 22:55:45] CHILD PROCESSING COMPLETE: E:\Shares\Data | Working Set: 90.16 MB | Managed Memory: 10.19 MB | CPU: 10.61 s | Elapsed: 31.67 s
+[DEBUG 22:55:46] BUILDING NODE OBJECT: E:\Shares\Data | Working Set: 90.16 MB | Managed Memory: 10.5 MB | CPU: 10.62 s | Elapsed: 31.69 s
+[DEBUG 22:55:46] NODE OBJECT COMPLETE: E:\Shares\Data | Working Set: 90.16 MB | Managed Memory: 11.24 MB | CPU: 10.66 s | Elapsed: 31.73 s
+[DEBUG 22:55:46] ROOT SCAN RETURNED | Working Set: 90.16 MB | Managed Memory: 11.51 MB | CPU: 10.67 s | Elapsed: 31.74 s
+[DEBUG 22:55:46] BUILDING FINAL REPORT OBJECT | Working Set: 90.16 MB | Managed Memory: 11.78 MB | CPU: 10.7 s | Elapsed: 31.76 s
+[DEBUG 22:55:46] FINAL REPORT OBJECT COMPLETE | Working Set: 90.2 MB | Managed Memory: 12.28 MB | CPU: 10.7 s | Elapsed: 31.82 s
+2026-11-11 22:55:46 [INFO] Starting JSON serialization diagnostics
+[DEBUG 22:55:46] STARTING TOP-LEVEL CHILD SERIALISATION TESTS | Working Set: 90.2 MB | Managed Memory: 12.83 MB | CPU: 10.7 s | Elapsed: 31.97 s
+[DEBUG 22:55:46] TESTING: Top-level child 1 : E:\Shares\Data\Manager Files.8-9-14 | Working Set: 90.21 MB | Managed Memory: 13.22 MB | CPU: 10.72 s | Elapsed: 31.99 s
+[DEBUG 22:55:46] JSON TEST START: Top-level child 1 : E:\Shares\Data\Manager Files.8-9-14 | Working Set: 90.21 MB | Managed Memory: 13.72 MB | CPU: 10.75 s | Elapsed: 32.01 s
