@@ -1,0 +1,19 @@
+{
+    "GeneratedAt":  "2026-11-11 21:55:00",
+    "Root":  "E:\\Shares\\Data",
+    "MaxDepth":  3,
+    "Tree":  {
+                 "Name":  "Data",
+                 "FullPath":  "E:\\Shares\\Data",
+                 "Depth":  0,
+                 "SizeBytes":  391855337,
+                 "Size":  "373.70 MB",
+                 "FileCount":  1345,
+                 "DirCount":  119,
+                 "FailedFiles":  0,
+                 "ExitCode":  1,
+                 "Children":  [
+
+                              ]
+             }
+}
