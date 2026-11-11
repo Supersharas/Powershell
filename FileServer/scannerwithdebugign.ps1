@@ -1,6 +1,8 @@
 
 # ============================================================
-# ROBOCOPY FOLDER SIZE SCANNER - DEBUG VERSION
+# ROBOCOPY FOLDER SIZE SCANNER
+#
+# Windows PowerShell 5.1 compatible
 #
 # - Backup mode (/B)
 # - List only (/L) - no files copied
@@ -8,7 +10,8 @@
 # - Individual Robocopy logs
 # - Master execution log
 # - Configurable folder depth
-# - Debug checkpoints and memory monitoring
+# - Detailed memory and execution checkpoints
+# - Staged JSON serialization diagnostics
 # ============================================================
 
 # ---------------- CONFIGURATION -----------------------------
@@ -23,6 +26,9 @@ $RoboLogDir = Join-Path $OutputDir "RobocopyLogs"
 
 $Robocopy = "$env:windir\System32\robocopy.exe"
 
+# Enable detailed debugging
+$DebugEnabled = $true
+
 # ---------------- INITIALISATION ----------------------------
 
 New-Item -ItemType Directory -Path $OutputDir -Force |
@@ -33,6 +39,54 @@ New-Item -ItemType Directory -Path $RoboLogDir -Force |
 
 $script:LogEntries = [System.Collections.Generic.List[string]]::new()
 $script:ScanCounter = 0
+$script:ScanStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+# ---------------- DEBUG CHECKPOINTS -------------------------
+
+function Write-DebugCheckpoint {
+
+    param(
+        [string]$Message
+    )
+
+    if (!$DebugEnabled) {
+        return
+    }
+
+    try {
+
+        $Process = Get-Process -Id $PID -ErrorAction Stop
+
+        $WorkingSetMB = [Math]::Round(
+            $Process.WorkingSet64 / 1MB, 2
+        )
+
+        $ManagedMemoryMB = [Math]::Round(
+            [GC]::GetTotalMemory($false) / 1MB, 2
+        )
+
+        $CpuSeconds = [Math]::Round(
+            $Process.CPU, 2
+        )
+
+        $ElapsedSeconds = [Math]::Round(
+            $script:ScanStopwatch.Elapsed.TotalSeconds, 2
+        )
+
+        $Timestamp = Get-Date -Format "HH:mm:ss"
+
+        $DebugMessage = "[DEBUG $Timestamp] $Message | Working Set: $WorkingSetMB MB | Managed Memory: $ManagedMemoryMB MB | CPU: $CpuSeconds s | Elapsed: $ElapsedSeconds s"
+
+        Write-Host $DebugMessage -ForegroundColor Cyan
+
+        Add-Content -LiteralPath $MasterLog -Value $DebugMessage
+
+    }
+    catch {
+
+        Write-Host "[DEBUG] $Message | Unable to collect memory statistics" -ForegroundColor Yellow
+    }
+}
 
 # ---------------- MASTER LOGGING ----------------------------
 
@@ -56,42 +110,6 @@ function Write-Log {
     }
 
     Write-Host $Entry -ForegroundColor $Color
-}
-
-# ---------------- DEBUG CHECKPOINTS -------------------------
-
-function Write-DebugCheckpoint {
-
-    param(
-        [string]$Message
-    )
-
-    $Process = Get-Process -Id $PID -ErrorAction SilentlyContinue
-
-    if ($Process) {
-
-        $WorkingSetMB = [math]::Round(
-            $Process.WorkingSet64 / 1MB, 2
-        )
-
-        $ManagedMemoryMB = [math]::Round(
-            [GC]::GetTotalMemory($false) / 1MB, 2
-        )
-
-        $CPUSeconds = [math]::Round(
-            $Process.CPU, 2
-        )
-
-        $Timestamp = Get-Date -Format "HH:mm:ss"
-
-        Write-Host (
-            "[DEBUG $Timestamp] {0} | Working Set: {1} MB | Managed Memory: {2} MB | CPU: {3}s" -f
-            $Message,
-            $WorkingSetMB,
-            $ManagedMemoryMB,
-            $CPUSeconds
-        ) -ForegroundColor Cyan
-    }
 }
 
 # ---------------- LOG FILE NAMING ---------------------------
@@ -127,6 +145,8 @@ function Invoke-RoboCommand {
         [string]$LogType
     )
 
+    Write-DebugCheckpoint "ROBOCOPY START: $LogType : $Source"
+
     $LogFile = New-RoboLogName `
         -Type $LogType `
         -Path $Source
@@ -144,13 +164,11 @@ function Invoke-RoboCommand {
             "/LOG:$LogFile"
         )
 
-        Write-DebugCheckpoint "STARTING ROBOCOPY [$LogType]: $Source"
-
         & $Robocopy @Arguments
 
         $ExitCode = $LASTEXITCODE
 
-        Write-DebugCheckpoint "ROBOCOPY PROCESS RETURNED [$LogType]: $Source - ExitCode $ExitCode"
+        Write-DebugCheckpoint "ROBOCOPY FINISHED: $LogType : $Source - Exit code $ExitCode"
 
         if (Test-Path -LiteralPath $LogFile) {
 
@@ -160,7 +178,8 @@ function Invoke-RoboCommand {
                 Get-Content -LiteralPath $LogFile -ErrorAction Stop
             )
 
-            Write-DebugCheckpoint "ROBOCOPY LOG READ COMPLETE: $LogFile"
+            Write-DebugCheckpoint "ROBOCOPY LOG READ COMPLETE: $LogFile - Lines: $($Lines.Count)"
+
         }
         else {
 
@@ -176,7 +195,9 @@ function Invoke-RoboCommand {
             Lines    = $Lines
             Error    = if (!$Success) {
                 "Robocopy returned exit code $ExitCode"
-            } else { $null }
+            } else {
+                $null
+            }
         }
 
     }
@@ -252,7 +273,7 @@ function Get-RoboSummary {
 
     Write-Log "Calculating folder statistics: $Path"
 
-    Write-DebugCheckpoint "ENTERING GET-ROBOSUMMARY: $Path"
+    Write-DebugCheckpoint "STATISTICS START: $Path"
 
     $Result = Invoke-RoboCommand `
         -Source $Path `
@@ -271,7 +292,7 @@ function Get-RoboSummary {
             "/XJ"
         )
 
-    Write-DebugCheckpoint "STATISTICS ROBOCOPY RETURNED: $Path"
+    Write-DebugCheckpoint "PARSING STATISTICS: $Path"
 
     $Files = Get-RoboSummaryValue $Result.Lines "Files"
     $Dirs  = Get-RoboSummaryValue $Result.Lines "Dirs"
@@ -310,9 +331,7 @@ function Get-RoboSummary {
         $Errors.Add("Unable to parse total bytes.")
     }
 
-    Write-DebugCheckpoint "STATISTICS PARSING COMPLETE: $Path"
-
-    [PSCustomObject]@{
+    $Stats = [PSCustomObject]@{
         Files      = $Files
         Dirs       = $Dirs
         Bytes      = $Bytes
@@ -327,6 +346,10 @@ function Get-RoboSummary {
             @()
         }
     }
+
+    Write-DebugCheckpoint "STATISTICS COMPLETE: $Path"
+
+    return $Stats
 }
 
 # ---------------- SUBFOLDER DISCOVERY ----------------------
@@ -337,9 +360,8 @@ function Get-RoboChildDirectories {
 
     Write-Log "Discovering immediate subfolders: $Path"
 
-    Write-DebugCheckpoint "ENTERING GET-ROBOCHILDDIRECTORIES: $Path"
+    Write-DebugCheckpoint "DISCOVERY START: $Path"
 
-    # IMPORTANT:
     # LEV:2 = source root + immediate child directories.
 
     $Result = Invoke-RoboCommand `
@@ -359,7 +381,7 @@ function Get-RoboChildDirectories {
             "/NJS"
         )
 
-    Write-DebugCheckpoint "DISCOVERY ROBOCOPY RETURNED: $Path"
+    Write-DebugCheckpoint "PARSING DISCOVERY OUTPUT: $Path"
 
     $Directories = [System.Collections.Generic.List[string]]::new()
 
@@ -385,17 +407,13 @@ function Get-RoboChildDirectories {
         $Directories | Sort-Object -Unique
     )
 
-    Write-DebugCheckpoint "DISCOVERY PARSING COMPLETE: $Path - Found $($UniqueDirectories.Count) folders"
-
     $Errors = [System.Collections.Generic.List[string]]::new()
 
     if ($Result.Error) {
-
         $Errors.Add($Result.Error)
     }
 
-    if ($UniqueDirectories.Count -eq 0 -and
-        $Result.Success) {
+    if ($UniqueDirectories.Count -eq 0 -and $Result.Success) {
 
         Write-Log "No immediate subfolders detected: $Path" "INFO"
     }
@@ -405,9 +423,7 @@ function Get-RoboChildDirectories {
         Write-Log "Discovered $($UniqueDirectories.Count) subfolders in $Path"
     }
 
-    Write-DebugCheckpoint "EXITING GET-ROBOCHILDDIRECTORIES: $Path"
-
-    [PSCustomObject]@{
+    $Discovery = [PSCustomObject]@{
         Directories = $UniqueDirectories
         ExitCode    = $Result.ExitCode
         Success     = $Result.Success
@@ -419,6 +435,10 @@ function Get-RoboChildDirectories {
             @()
         }
     }
+
+    Write-DebugCheckpoint "DISCOVERY COMPLETE: $Path - Children: $($UniqueDirectories.Count)"
+
+    return $Discovery
 }
 
 # ---------------- RECURSIVE SCANNING ------------------------
@@ -430,15 +450,13 @@ function New-FolderNode {
         [int]$Depth
     )
 
+    Write-DebugCheckpoint "NODE START: $Path"
+
     Write-Log "Scanning [$Depth/$MaxDepth]: $Path"
-
-    Write-DebugCheckpoint "ENTER NEW-FOLDERNODE: [$Depth/$MaxDepth] $Path"
-
-    # Calculate folder statistics.
 
     $Stats = Get-RoboSummary -Path $Path
 
-    Write-DebugCheckpoint "STATISTICS COMPLETE: $Path"
+    Write-DebugCheckpoint "NODE STATISTICS RETURNED: $Path"
 
     $Children = [System.Collections.Generic.List[object]]::new()
 
@@ -452,11 +470,9 @@ function New-FolderNode {
 
     if ($Depth -lt $MaxDepth) {
 
-        Write-DebugCheckpoint "STARTING DISCOVERY: $Path"
-
         $Discovery = Get-RoboChildDirectories -Path $Path
 
-        Write-DebugCheckpoint "DISCOVERY COMPLETE: $Path"
+        Write-DebugCheckpoint "NODE DISCOVERY RETURNED: $Path"
 
         foreach ($ErrorMessage in $Discovery.Errors) {
             $Errors.Add("Discovery: $ErrorMessage")
@@ -476,7 +492,7 @@ function New-FolderNode {
 
         foreach ($ChildPath in $Discovery.Directories) {
 
-            Write-DebugCheckpoint "STARTING CHILD: $ChildPath"
+            Write-DebugCheckpoint "PROCESSING CHILD: $ChildPath"
 
             $ChildNode = New-FolderNode `
                 -Path $ChildPath `
@@ -571,6 +587,50 @@ function New-FolderNode {
     return $Node
 }
 
+# ---------------- JSON SERIALISATION DIAGNOSTICS -----------
+
+function Test-JsonSerialization {
+
+    param(
+        [string]$Description,
+        [object]$InputObject
+    )
+
+    Write-DebugCheckpoint "JSON TEST START: $Description"
+
+    $Timer = [System.Diagnostics.Stopwatch]::StartNew()
+
+    try {
+
+        $TestJson = ConvertTo-Json `
+            -InputObject $InputObject `
+            -Depth 100 `
+            -Compress `
+            -ErrorAction Stop
+
+        $Timer.Stop()
+
+        $Length = $TestJson.Length
+
+        Write-DebugCheckpoint "JSON TEST COMPLETE: $Description - Characters: $Length - Time: $([Math]::Round($Timer.Elapsed.TotalSeconds,2)) seconds"
+
+        Remove-Variable TestJson -ErrorAction SilentlyContinue
+
+        return $true
+    }
+    catch {
+
+        $Timer.Stop()
+
+        Write-Host "JSON TEST FAILED: $Description" -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor Red
+
+        Write-DebugCheckpoint "JSON TEST FAILED: $Description"
+
+        return $false
+    }
+}
+
 # ---------------- MAIN EXECUTION ---------------------------
 
 try {
@@ -579,9 +639,10 @@ try {
     Write-Log "ROBOCOPY FOLDER SCAN STARTED"
     Write-Log "Root: $Root"
     Write-Log "Maximum depth: $MaxDepth"
+    Write-Log "PowerShell version: $($PSVersionTable.PSVersion)"
     Write-Log "=========================================="
 
-    Write-DebugCheckpoint "SCRIPT INITIALISATION COMPLETE"
+    Write-DebugCheckpoint "INITIALISATION COMPLETE"
 
     if (!(Test-Path -LiteralPath $Root -PathType Container)) {
 
@@ -595,7 +656,7 @@ try {
 
     $Root = (Resolve-Path -LiteralPath $Root -ErrorAction Stop).Path
 
-    # Start recursive scan.
+    # ---------------- START RECURSIVE SCAN -----------------
 
     Write-DebugCheckpoint "STARTING ROOT SCAN"
 
@@ -605,7 +666,7 @@ try {
 
     Write-DebugCheckpoint "ROOT SCAN RETURNED"
 
-    # Build final report.
+    # ---------------- BUILD FINAL REPORT -------------------
 
     Write-DebugCheckpoint "BUILDING FINAL REPORT OBJECT"
 
@@ -626,13 +687,82 @@ try {
 
     Write-DebugCheckpoint "FINAL REPORT OBJECT COMPLETE"
 
-    # Export JSON.
+    # ---------------- SERIALISATION TESTS ------------------
 
-    Write-DebugCheckpoint "STARTING JSON CONVERSION"
+    Write-Log "Starting JSON serialization diagnostics"
 
-    $Json = $Report | ConvertTo-Json -Depth 100
+    Write-DebugCheckpoint "STARTING TOP-LEVEL CHILD SERIALISATION TESTS"
 
-    Write-DebugCheckpoint "JSON CONVERSION COMPLETE - Length: $($Json.Length)"
+    # Test each immediate child independently.
+    # This helps identify a specific subtree causing a problem.
+
+    $ChildNumber = 0
+
+    foreach ($Child in $Tree.Children) {
+
+        $ChildNumber++
+
+        $ChildDescription = "Top-level child $ChildNumber : $($Child.FullPath)"
+
+        Write-DebugCheckpoint "TESTING: $ChildDescription"
+
+        $ChildResult = Test-JsonSerialization `
+            -Description $ChildDescription `
+            -InputObject $Child
+
+        if (!$ChildResult) {
+
+            Write-Log "JSON serialization failed for $ChildDescription" "ERROR"
+        }
+
+        Write-DebugCheckpoint "TOP-LEVEL CHILD TEST FINISHED: $ChildDescription"
+    }
+
+    Write-DebugCheckpoint "ALL TOP-LEVEL CHILD TESTS FINISHED"
+
+    # Test the complete tree separately.
+
+    $TreeResult = Test-JsonSerialization `
+        -Description "Complete folder tree" `
+        -InputObject $Tree
+
+    # Test the report without its execution log.
+
+    $ReportWithoutLog = [PSCustomObject][ordered]@{
+
+        GeneratedAt = $Report.GeneratedAt
+        Root        = $Report.Root
+        MaxDepth    = $Report.MaxDepth
+        ScanStatus  = $Report.ScanStatus
+        Tree        = $Report.Tree
+    }
+
+    $ReportCoreResult = Test-JsonSerialization `
+        -Description "Report without execution log" `
+        -InputObject $ReportWithoutLog
+
+    # Test execution log separately.
+
+    $LogResult = Test-JsonSerialization `
+        -Description "Execution log only" `
+        -InputObject @($script:LogEntries)
+
+    # ---------------- COMPLETE JSON CONVERSION ------------
+
+    Write-DebugCheckpoint "STARTING COMPLETE REPORT JSON CONVERSION"
+
+    $JsonTimer = [System.Diagnostics.Stopwatch]::StartNew()
+
+    $Json = ConvertTo-Json `
+        -InputObject $Report `
+        -Depth 100 `
+        -ErrorAction Stop
+
+    $JsonTimer.Stop()
+
+    Write-DebugCheckpoint "JSON CONVERSION COMPLETE - Length: $($Json.Length) - Time: $([Math]::Round($JsonTimer.Elapsed.TotalSeconds,2)) seconds"
+
+    # ---------------- JSON FILE WRITE ----------------------
 
     Write-DebugCheckpoint "STARTING JSON FILE WRITE"
 
@@ -644,6 +774,8 @@ try {
 
     Write-DebugCheckpoint "JSON FILE WRITTEN"
 
+    # ---------------- COMPLETION ---------------------------
+
     Write-Log "=========================================="
     Write-Log "SCAN COMPLETED"
     Write-Log "JSON: $JsonOutput"
@@ -652,14 +784,22 @@ try {
     Write-Log "Overall status: $($Tree.ScanStatus)"
     Write-Log "=========================================="
 
-    Write-DebugCheckpoint "SCRIPT COMPLETED SUCCESSFULLY"
-}
+    Write-Host ""
+    Write-Host "JSON diagnostics:" -ForegroundColor Green
+    Write-Host "  Complete tree: $TreeResult"
+    Write-Host "  Report without log: $ReportCoreResult"
+    Write-Host "  Execution log: $LogResult"
+    Write-Host ""
 
+    Write-DebugCheckpoint "SCRIPT COMPLETED"
+
+}
 catch {
 
     Write-Log "FATAL ERROR: $($_.Exception.Message)" "ERROR"
 
-    Write-DebugCheckpoint "SCRIPT TERMINATED WITH ERROR"
+    Write-Host "Error details:" -ForegroundColor Red
+    Write-Host $_.ScriptStackTrace -ForegroundColor Red
 
     throw
 }
