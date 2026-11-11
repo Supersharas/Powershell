@@ -1,29 +1,52 @@
 
 # ============================================================
-# Robocopy Folder Scanner - Diagnostic Version
-# Backup mode / No copying / Hierarchical JSON
+# ROBOCOPY FOLDER SIZE SCANNER
+#
+# - Backup mode (/B)
+# - List only (/L) - no files copied
+# - Hierarchical JSON output
+# - Individual Robocopy logs
+# - Master execution log
+# - Configurable folder depth
 # ============================================================
+
+# ---------------- CONFIGURATION -----------------------------
 
 $Root       = "E:\Shares\Data"
 $MaxDepth   = 3
-$JsonOutput = "C:\Temp\FolderReport.json"
+
+$OutputDir  = "C:\Temp\RoboSizeReport"
+$JsonOutput = Join-Path $OutputDir "FolderReport.json"
+$MasterLog  = Join-Path $OutputDir "Execution.log"
+$RoboLogDir = Join-Path $OutputDir "RobocopyLogs"
 
 $Robocopy = "$env:windir\System32\robocopy.exe"
 
-# ------------------------------------------------------------
-# Logging
-# ------------------------------------------------------------
+# ---------------- INITIALISATION ----------------------------
 
-$Log = [System.Collections.Generic.List[string]]::new()
+New-Item -ItemType Directory -Path $OutputDir -Force |
+    Out-Null
+
+New-Item -ItemType Directory -Path $RoboLogDir -Force |
+    Out-Null
+
+$script:LogEntries = [System.Collections.Generic.List[string]]::new()
+$script:ScanCounter = 0
+
+# ---------------- MASTER LOGGING ----------------------------
 
 function Write-Log {
+
     param(
         [string]$Message,
         [string]$Level = "INFO"
     )
 
     $Entry = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [$Level] $Message"
-    $Log.Add($Entry)
+
+    $script:LogEntries.Add($Entry)
+
+    Add-Content -LiteralPath $MasterLog -Value $Entry
 
     $Color = switch ($Level) {
         "ERROR"   { "Red" }
@@ -34,58 +57,103 @@ function Write-Log {
     Write-Host $Entry -ForegroundColor $Color
 }
 
-# ------------------------------------------------------------
-# Run Robocopy and capture everything
-# ------------------------------------------------------------
+# ---------------- LOG FILE NAMING ---------------------------
 
-function Invoke-RoboCommand {
+function New-RoboLogName {
+
     param(
-        [string]$Source,
-        [string[]]$Options
+        [string]$Type,
+        [string]$Path
     )
 
+    $script:ScanCounter++
+
+    $SafeName = Split-Path $Path -Leaf
+
+    $SafeName = $SafeName -replace '[^a-zA-Z0-9_-]', '_'
+
+    return Join-Path $RoboLogDir (
+        "{0:D5}_{1}_{2}.log" -f
+        $script:ScanCounter,
+        $SafeName,
+        $Type
+    )
+}
+
+# ---------------- ROBOCOPY EXECUTION ------------------------
+
+function Invoke-RoboCommand {
+
+    param(
+        [string]$Source,
+        [string[]]$Options,
+        [string]$LogType
+    )
+
+    $LogFile = New-RoboLogName `
+        -Type $LogType `
+        -Path $Source
+
     try {
+
         if (!(Test-Path -LiteralPath $Robocopy -PathType Leaf)) {
             throw "Robocopy executable not found: $Robocopy"
         }
 
-        # Unique destination for each dry-run operation.
-        # Robocopy /L never creates or copies into it.
-        $Destination = Join-Path $env:TEMP (
-            "RoboSize_" + [guid]::NewGuid().ToString("N")
+        $Arguments = @(
+            $Source
+            "$env:TEMP\RoboSize_Dummy"
+        ) + $Options + @(
+            "/LOG:$LogFile"
         )
 
-        $Output = & $Robocopy $Source $Destination @Options 2>&1
+        & $Robocopy @Arguments
+
         $ExitCode = $LASTEXITCODE
 
-        $Lines = @(
-            $Output | ForEach-Object { $_.ToString() }
-        )
+        if (Test-Path -LiteralPath $LogFile) {
+
+            $Lines = @(
+                Get-Content -LiteralPath $LogFile -ErrorAction Stop
+            )
+
+        }
+        else {
+
+            $Lines = @()
+        }
+
+        $Success = ($ExitCode -ge 0 -and $ExitCode -lt 8)
 
         [PSCustomObject]@{
             ExitCode = $ExitCode
+            Success  = $Success
+            LogFile  = $LogFile
             Lines    = $Lines
-            Success  = ($ExitCode -lt 8)
-            Error    = if ($ExitCode -ge 8) {
-                "Robocopy failed with exit code $ExitCode"
+            Error    = if (!$Success) {
+                "Robocopy returned exit code $ExitCode"
             } else { $null }
         }
+
     }
     catch {
+
+        Write-Log "Robocopy execution failed for $Source : $($_.Exception.Message)" "ERROR"
+
         [PSCustomObject]@{
             ExitCode = -1
-            Lines    = @($_.Exception.Message)
             Success  = $false
+            LogFile  = $LogFile
+            Lines    = @()
             Error    = $_.Exception.Message
         }
     }
 }
 
-# ------------------------------------------------------------
-# Parse numeric summary values
-# ------------------------------------------------------------
+# ---------------- SUMMARY PARSING ---------------------------
 
 function Get-RoboSummaryValue {
+
     param(
         [string[]]$Lines,
         [string]$Label
@@ -98,24 +166,64 @@ function Get-RoboSummaryValue {
         Select-Object -First 1
 
     if ($Line -match ':\s*([\d,]+)') {
-        return [long]($Matches[1] -replace ',', '')
+
+        return [long](
+            $Matches[1] -replace ',', ''
+        )
     }
 
     return $null
 }
 
-# ------------------------------------------------------------
-# Folder statistics
-# ------------------------------------------------------------
+# ---------------- SIZE FORMATTING ---------------------------
+
+function Format-Size {
+
+    param([long]$Bytes)
+
+    if ($Bytes -ge 1TB) {
+        return "{0:N2} TB" -f ($Bytes / 1TB)
+    }
+
+    if ($Bytes -ge 1GB) {
+        return "{0:N2} GB" -f ($Bytes / 1GB)
+    }
+
+    if ($Bytes -ge 1MB) {
+        return "{0:N2} MB" -f ($Bytes / 1MB)
+    }
+
+    if ($Bytes -ge 1KB) {
+        return "{0:N2} KB" -f ($Bytes / 1KB)
+    }
+
+    return "$Bytes Bytes"
+}
+
+# ---------------- FOLDER STATISTICS ------------------------
 
 function Get-RoboSummary {
+
     param([string]$Path)
 
-    $Result = Invoke-RoboCommand -Source $Path -Options @(
-        "/L", "/B", "/E", "/BYTES",
-        "/R:0", "/W:0", "/NFL", "/NDL",
-        "/NJH", "/NP", "/XJ"
-    )
+    Write-Log "Calculating folder statistics: $Path"
+
+    $Result = Invoke-RoboCommand `
+        -Source $Path `
+        -LogType "Statistics" `
+        -Options @(
+            "/L"
+            "/B"
+            "/E"
+            "/BYTES"
+            "/R:0"
+            "/W:0"
+            "/NFL"
+            "/NDL"
+            "/NJH"
+            "/NP"
+            "/XJ"
+        )
 
     $Files = Get-RoboSummaryValue $Result.Lines "Files"
     $Dirs  = Get-RoboSummaryValue $Result.Lines "Dirs"
@@ -124,34 +232,35 @@ function Get-RoboSummary {
     $Failed = $null
 
     $FileLine = $Result.Lines |
-        Where-Object { $_ -match '^\s*Files\s*:' } |
+        Where-Object {
+            $_ -match '^\s*Files\s*:'
+        } |
         Select-Object -First 1
 
-    if ($FileLine -match '^\s*Files\s*:\s*([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)\s+([\d,]+)') {
-        $Failed = [long]($Matches[5] -replace ',', '')
+    if ($FileLine -match '^\s*Files\s*:\s*[\d,]+\s+[\d,]+\s+[\d,]+\s+[\d,]+\s+([\d,]+)') {
+
+        $Failed = [long](
+            $Matches[1] -replace ',', ''
+        )
     }
 
-    $ParseErrors = @()
+    $Errors = [System.Collections.Generic.List[string]]::new()
+
+    if ($Result.Error) {
+        $Errors.Add($Result.Error)
+    }
 
     if ($null -eq $Files) {
-        $ParseErrors += "Could not parse Files summary."
+        $Errors.Add("Unable to parse file count.")
     }
 
     if ($null -eq $Dirs) {
-        $ParseErrors += "Could not parse Dirs summary."
+        $Errors.Add("Unable to parse directory count.")
     }
 
     if ($null -eq $Bytes) {
-        $ParseErrors += "Could not parse Bytes summary."
+        $Errors.Add("Unable to parse total bytes.")
     }
-
-    $Errors = @()
-
-    if ($Result.Error) {
-        $Errors += $Result.Error
-    }
-
-    $Errors += $ParseErrors
 
     [PSCustomObject]@{
         Files      = $Files
@@ -159,47 +268,60 @@ function Get-RoboSummary {
         Bytes      = $Bytes
         Failed     = $Failed
         ExitCode   = $Result.ExitCode
-        Errors     = $Errors
+        Success    = ($Result.Success -and $Errors.Count -eq 0)
+        Errors     = @($Errors)
+        LogFile    = $Result.LogFile
         RawOutput  = if ($Errors.Count -gt 0) {
             $Result.Lines
-        } else { @() }
-        Success    = ($Result.Success -and $ParseErrors.Count -eq 0)
+        } else {
+            @()
+        }
     }
 }
 
-# ------------------------------------------------------------
-# Discover immediate child folders
-# ------------------------------------------------------------
+# ---------------- SUBFOLDER DISCOVERY ----------------------
 
 function Get-RoboChildDirectories {
+
     param([string]$Path)
 
-    Write-Log "Discovering subfolders: $Path"
+    Write-Log "Discovering immediate subfolders: $Path"
 
-    $Result = Invoke-RoboCommand -Source $Path -Options @(
-        "/L", "/B", "/E", "/LEV:1",
-        "/FP", "/R:0", "/W:0",
-        "/NJH", "/NJS", "/NP", "/XJ"
-    )
+    # IMPORTANT:
+    # LEV:2 = source root + immediate child directories.
+
+    $Result = Invoke-RoboCommand `
+        -Source $Path `
+        -LogType "Discovery" `
+        -Options @(
+            "/L"
+            "/B"
+            "/E"
+            "/LEV:2"
+            "/FP"
+            "/R:0"
+            "/W:0"
+            "/NP"
+            "/XJ"
+            "/NJH"
+            "/NJS"
+        )
 
     $Directories = [System.Collections.Generic.List[string]]::new()
 
-    $EscapedRoot = [regex]::Escape($Path.TrimEnd('\'))
-
     foreach ($Line in $Result.Lines) {
 
-        # Find full paths rooted under the source directory.
-        # This avoids relying on English "New Dir" labels.
+        # English Robocopy output:
+        # New Dir          6    E:\Shares\Data\
 
-        $Pattern = "(?i)(?:^|\s{2,})" +
-                   $EscapedRoot +
-                   "\\([^\\]+)\\?\s*$"
+        if ($Line -match '^\s*New Dir\s+\d+\s+(.+?)\s*$') {
 
-        if ($Line -match $Pattern) {
+            $ChildPath = $Matches[1].Trim().TrimEnd('\')
 
-            $ChildPath = Join-Path $Path $Matches[1]
+            # Exclude the source directory itself.
 
-            if ($ChildPath -ne $Path) {
+            if ($ChildPath -ine $Path.TrimEnd('\')) {
+
                 $Directories.Add($ChildPath)
             }
         }
@@ -209,78 +331,79 @@ function Get-RoboChildDirectories {
         $Directories | Sort-Object -Unique
     )
 
+    $Errors = [System.Collections.Generic.List[string]]::new()
+
+    if ($Result.Error) {
+
+        $Errors.Add($Result.Error)
+    }
+
+    if ($UniqueDirectories.Count -eq 0 -and
+        $Result.Success) {
+
+        Write-Log "No immediate subfolders detected: $Path" "INFO"
+    }
+
+    if ($UniqueDirectories.Count -gt 0) {
+
+        Write-Log "Discovered $($UniqueDirectories.Count) subfolders in $Path"
+    }
+
     [PSCustomObject]@{
         Directories = $UniqueDirectories
         ExitCode    = $Result.ExitCode
         Success     = $Result.Success
-        Errors      = if ($Result.Error) {
-            @($Result.Error)
-        } elseif (!$UniqueDirectories.Count -and $Result.Success) {
-            @("No subfolders detected. Check raw Robocopy output.")
+        Errors      = @($Errors)
+        LogFile     = $Result.LogFile
+        RawOutput   = if (!$UniqueDirectories.Count) {
+            $Result.Lines
         } else {
             @()
         }
-        RawOutput   = if (!$UniqueDirectories.Count) {
-            $Result.Lines
-        } else { @() }
     }
 }
 
-# ------------------------------------------------------------
-# Format file size
-# ------------------------------------------------------------
-
-function Format-Size {
-    param([long]$Bytes)
-
-    if ($Bytes -ge 1TB) {
-        "{0:N2} TB" -f ($Bytes / 1TB)
-    }
-    elseif ($Bytes -ge 1GB) {
-        "{0:N2} GB" -f ($Bytes / 1GB)
-    }
-    elseif ($Bytes -ge 1MB) {
-        "{0:N2} MB" -f ($Bytes / 1MB)
-    }
-    elseif ($Bytes -ge 1KB) {
-        "{0:N2} KB" -f ($Bytes / 1KB)
-    }
-    else {
-        "$Bytes Bytes"
-    }
-}
-
-# ------------------------------------------------------------
-# Recursive folder scanning
-# ------------------------------------------------------------
+# ---------------- RECURSIVE SCANNING ------------------------
 
 function New-FolderNode {
+
     param(
         [string]$Path,
         [int]$Depth
     )
 
-    Write-Log "Scanning folder: $Path"
+    Write-Log "Scanning [$Depth/$MaxDepth]: $Path"
 
     $Stats = Get-RoboSummary -Path $Path
 
     $Children = [System.Collections.Generic.List[object]]::new()
+
     $Errors = [System.Collections.Generic.List[string]]::new()
 
     foreach ($ErrorMessage in $Stats.Errors) {
         $Errors.Add($ErrorMessage)
     }
 
-    $DiscoveryExitCode = $null
+    $Discovery = $null
 
     if ($Depth -lt $MaxDepth) {
 
         $Discovery = Get-RoboChildDirectories -Path $Path
 
-        $DiscoveryExitCode = $Discovery.ExitCode
-
         foreach ($ErrorMessage in $Discovery.Errors) {
             $Errors.Add("Discovery: $ErrorMessage")
+        }
+
+        # If Robocopy reports child directories in its statistics
+        # but discovery finds none, record a diagnostic warning.
+
+        if ($Stats.Dirs -gt 1 -and
+            $Discovery.Directories.Count -eq 0 -and
+            $Discovery.Success) {
+
+            $Errors.Add(
+                "Robocopy reports $($Stats.Dirs) directories but no immediate subfolders were parsed. Check discovery log."
+            )
         }
 
         foreach ($ChildPath in $Discovery.Directories) {
@@ -293,82 +416,148 @@ function New-FolderNode {
         }
     }
 
-    $Status = if (!$Stats.Success) {
-        "Failed"
+    # Determine scan status.
+
+    $ChildWarnings = @(
+        $Children | Where-Object {
+            $_.ScanStatus -ne "Success"
+        }
+    )
+
+    if (!$Stats.Success -or
+        ($Discovery -and !$Discovery.Success)) {
+
+        $Status = "Failed"
     }
     elseif ($Errors.Count -gt 0 -or
-            $Stats.Failed -gt 0 -or
-            @($Children | Where-Object {
-                $_.ScanStatus -ne "Success"
-            }).Count -gt 0) {
-        "Warning"
+            ($null -ne $Stats.Failed -and $Stats.Failed -gt 0) -or
+            $ChildWarnings.Count -gt 0) {
+
+        $Status = "Warning"
     }
     else {
-        "Success"
+
+        $Status = "Success"
     }
 
     [PSCustomObject][ordered]@{
-        Name               = Split-Path $Path -Leaf
-        FullPath           = $Path
-        Depth              = $Depth
-        SizeBytes          = $Stats.Bytes
-        Size               = if ($null -ne $Stats.Bytes) {
+
+        Name       = Split-Path $Path -Leaf
+        FullPath   = $Path
+        Depth      = $Depth
+
+        SizeBytes  = $Stats.Bytes
+
+        Size       = if ($null -ne $Stats.Bytes) {
             Format-Size $Stats.Bytes
-        } else { $null }
-        FileCount          = $Stats.Files
-        DirCount           = $Stats.Dirs
-        FailedFiles        = $Stats.Failed
-        ExitCode           = $Stats.ExitCode
-        DiscoveryExitCode  = $DiscoveryExitCode
-        ScanStatus         = $Status
-        Errors             = @($Errors)
-        RawOutput          = $Stats.RawOutput
-        Children           = $Children
+        } else {
+            $null
+        }
+
+        FileCount  = $Stats.Files
+        DirCount   = $Stats.Dirs
+
+        FailedFiles = $Stats.Failed
+
+        ExitCode   = $Stats.ExitCode
+
+        DiscoveryExitCode = if ($Discovery) {
+            $Discovery.ExitCode
+        } else {
+            $null
+        }
+
+        ScanStatus = $Status
+
+        Errors     = @($Errors)
+
+        StatisticsLog = $Stats.LogFile
+
+        DiscoveryLog = if ($Discovery) {
+            $Discovery.LogFile
+        } else {
+            $null
+        }
+
+        RawOutput = $Stats.RawOutput
+
+        DiscoveryRawOutput = if ($Discovery) {
+            $Discovery.RawOutput
+        } else {
+            @()
+        }
+
+        Children = $Children
     }
 }
 
-# ------------------------------------------------------------
-# Main
-# ------------------------------------------------------------
+# ---------------- MAIN EXECUTION ---------------------------
 
 try {
 
-    Write-Log "Starting scan: $Root"
+    Write-Log "=========================================="
+    Write-Log "ROBOCOPY FOLDER SCAN STARTED"
+    Write-Log "Root: $Root"
+    Write-Log "Maximum depth: $MaxDepth"
+    Write-Log "=========================================="
 
     if (!(Test-Path -LiteralPath $Root -PathType Container)) {
+
         throw "Root folder does not exist or is inaccessible: $Root"
+    }
+
+    if (!(Test-Path -LiteralPath $Robocopy -PathType Leaf)) {
+
+        throw "Robocopy executable not found: $Robocopy"
     }
 
     $Root = (Resolve-Path -LiteralPath $Root -ErrorAction Stop).Path
 
-    $Tree = New-FolderNode -Path $Root -Depth 0
+    # Start recursive scan.
+
+    $Tree = New-FolderNode `
+        -Path $Root `
+        -Depth 0
+
+    # Build final report.
 
     $Report = [PSCustomObject][ordered]@{
+
         GeneratedAt = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+
         Root        = $Root
+
         MaxDepth    = $MaxDepth
+
+        ScanStatus  = $Tree.ScanStatus
+
         Tree        = $Tree
-        Log         = @($Log)
+
+        Log         = @($script:LogEntries)
     }
 
-    $OutputDirectory = Split-Path $JsonOutput -Parent
-
-    if (!(Test-Path -LiteralPath $OutputDirectory)) {
-        New-Item -ItemType Directory -Path $OutputDirectory -Force `
-            -ErrorAction Stop | Out-Null
-    }
+    # Export JSON.
 
     $Json = $Report | ConvertTo-Json -Depth 100
 
-    Set-Content -LiteralPath $JsonOutput -Value $Json `
-        -Encoding UTF8 -ErrorAction Stop
+    Set-Content `
+        -LiteralPath $JsonOutput `
+        -Value $Json `
+        -Encoding UTF8 `
+        -ErrorAction Stop
 
-    Write-Log "Scan completed: $JsonOutput"
+    Write-Log "=========================================="
+    Write-Log "SCAN COMPLETED"
+    Write-Log "JSON: $JsonOutput"
+    Write-Log "MASTER LOG: $MasterLog"
+    Write-Log "ROBOCOPY LOGS: $RoboLogDir"
+    Write-Log "Overall status: $($Tree.ScanStatus)"
+    Write-Log "=========================================="
 
 }
 catch {
 
-    Write-Log $_.Exception.Message "ERROR"
+    Write-Log "FATAL ERROR: $($_.Exception.Message)" "ERROR"
 
     throw
 }
