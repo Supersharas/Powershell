@@ -1,0 +1,5066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Robocopy Folder Size Report</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f4f6f8;
+    color: #252525;
+    margin: 0;
+    padding: 25px;
+}
+
+h1 {
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.toolbar {
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+button:hover {
+    background: #e8edf3;
+}
+
+.report {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.folder {
+    margin: 3px 0;
+}
+
+.folder summary {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 9px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    list-style: none;
+}
+
+.folder summary::-webkit-details-marker {
+    display: none;
+}
+
+.folder summary::before {
+    content: "▶";
+    font-size: 10px;
+    color: #777;
+    width: 12px;
+    flex-shrink: 0;
+}
+
+.folder[open] > summary::before {
+    content: "▼";
+}
+
+.folder summary:hover,
+.leaf-row:hover {
+    background: #f0f4f8;
+}
+
+.folder-name {
+    flex: 1;
+    font-weight: 600;
+    min-width: 150px;
+}
+
+.folder-size {
+    width: 110px;
+    text-align: right;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+}
+
+.folder-files {
+    width: 100px;
+    text-align: right;
+    font-size: 13px;
+    color: #666;
+}
+
+.folder-status {
+    width: 90px;
+    text-align: center;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.success {
+    color: #16733b;
+    background: #e3f5e9;
+}
+
+.failed {
+    color: #b42318;
+    background: #fde8e7;
+}
+
+.partial {
+    color: #946200;
+    background: #fff3cd;
+}
+
+.unknown {
+    color: #666;
+    background: #eee;
+}
+
+.children {
+    margin-left: 23px;
+    padding-left: 12px;
+    border-left: 1px solid #ddd;
+}
+
+.folder-path {
+    font-size: 11px;
+    color: #888;
+    padding: 0 10px 7px 38px;
+    word-break: break-all;
+}
+
+.leaf {
+    padding: 8px 10px;
+}
+
+.leaf-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 5px;
+    padding: 3px 0;
+}
+
+.leaf .folder-name {
+    font-weight: 400;
+}
+
+.leaf .folder-path {
+    padding-left: 25px;
+}
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .folder summary,
+    .leaf-row {
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .folder-name {
+        min-width: 100px;
+    }
+
+    .folder-size {
+        width: auto;
+    }
+
+    .folder-files {
+        width: auto;
+    }
+
+    .folder-status {
+        width: auto;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Robocopy Folder Size Report</h1>
+
+<div class="subtitle">
+    Generated: 12/11/2026 22:33:36
+</div>
+
+<div class="toolbar">
+    <button onclick="expandAll()">Expand all</button>
+    <button onclick="collapseAll()">Collapse all</button>
+</div>
+
+<div class="report">
+
+
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Work</span>
+                <span class="folder-size">105.90 MB</span>
+                <span class="folder-files">5850 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Projects</span>
+                <span class="folder-size">171.58 KB</span>
+                <span class="folder-files">145 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Powershell</span>
+                <span class="folder-size">142.20 KB</span>
+                <span class="folder-files">107 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Powershell</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 .git</span>
+                <span class="folder-size">76.10 KB</span>
+                <span class="folder-files">97 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Powershell\.git</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 hooks</span>
+            <span class="folder-size">25.22 KB</span>
+            <span class="folder-files">14 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\hooks</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">240 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\info</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 logs</span>
+                <span class="folder-size">1.04 KB</span>
+                <span class="folder-files">4 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Powershell\.git\logs</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 refs</span>
+                <span class="folder-size">747 Bytes</span>
+                <span class="folder-files">3 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Powershell\.git\logs\refs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 heads</span>
+            <span class="folder-size">314 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\logs\refs\heads</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 remotes</span>
+            <span class="folder-size">433 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\logs\refs\remotes</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 objects</span>
+                <span class="folder-size">47.68 KB</span>
+                <span class="folder-files">68 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Powershell\.git\objects</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 00</span>
+            <span class="folder-size">819 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\00</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 03</span>
+            <span class="folder-size">371 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\03</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 06</span>
+            <span class="folder-size">98 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\06</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 07</span>
+            <span class="folder-size">392 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\07</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 16</span>
+            <span class="folder-size">817 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\16</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 18</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\18</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 1b</span>
+            <span class="folder-size">821 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\1b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 20</span>
+            <span class="folder-size">882 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\20</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 28</span>
+            <span class="folder-size">471 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\28</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 2b</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\2b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 33</span>
+            <span class="folder-size">4.61 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\33</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 34</span>
+            <span class="folder-size">305 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\34</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 38</span>
+            <span class="folder-size">829 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\38</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3b</span>
+            <span class="folder-size">180 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\3b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3c</span>
+            <span class="folder-size">4.43 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\3c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3f</span>
+            <span class="folder-size">305 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\3f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 41</span>
+            <span class="folder-size">335 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\41</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 42</span>
+            <span class="folder-size">53 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\42</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 43</span>
+            <span class="folder-size">155 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\43</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 44</span>
+            <span class="folder-size">3.79 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\44</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 4b</span>
+            <span class="folder-size">15 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\4b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 4d</span>
+            <span class="folder-size">277 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\4d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 59</span>
+            <span class="folder-size">608 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\59</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 5a</span>
+            <span class="folder-size">247 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\5a</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 61</span>
+            <span class="folder-size">304 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\61</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 67</span>
+            <span class="folder-size">3.82 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\67</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 68</span>
+            <span class="folder-size">129 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\68</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 77</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\77</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 7c</span>
+            <span class="folder-size">97 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\7c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 7d</span>
+            <span class="folder-size">224 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\7d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 80</span>
+            <span class="folder-size">236 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\80</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 83</span>
+            <span class="folder-size">155 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\83</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 86</span>
+            <span class="folder-size">339 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\86</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 89</span>
+            <span class="folder-size">61 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\89</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 8c</span>
+            <span class="folder-size">1.76 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\8c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 90</span>
+            <span class="folder-size">1.61 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\90</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 96</span>
+            <span class="folder-size">128 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\96</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 9a</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\9a</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 9c</span>
+            <span class="folder-size">181 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\9c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a1</span>
+            <span class="folder-size">4.29 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\a1</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a5</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\a5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a6</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\a6</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a9</span>
+            <span class="folder-size">53 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\a9</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ad</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\ad</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ae</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\ae</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b0</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\b0</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b2</span>
+            <span class="folder-size">97 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\b2</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b3</span>
+            <span class="folder-size">823 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\b3</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b4</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\b4</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b8</span>
+            <span class="folder-size">822 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\b8</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b9</span>
+            <span class="folder-size">830 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\b9</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 bf</span>
+            <span class="folder-size">827 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\bf</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 c7</span>
+            <span class="folder-size">53 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\c7</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 cc</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\cc</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 d9</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\d9</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e2</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\e2</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e4</span>
+            <span class="folder-size">5.58 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\e4</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e5</span>
+            <span class="folder-size">824 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\e5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f1</span>
+            <span class="folder-size">1.18 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\f1</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f4</span>
+            <span class="folder-size">155 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\f4</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f7</span>
+            <span class="folder-size">354 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\f7</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f8</span>
+            <span class="folder-size">823 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\f8</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 fb</span>
+            <span class="folder-size">840 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\fb</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\info</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 pack</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\objects\pack</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 refs</span>
+                <span class="folder-size">112 Bytes</span>
+                <span class="folder-files">3 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Powershell\.git\refs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 heads</span>
+            <span class="folder-size">41 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\refs\heads</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 remotes</span>
+                <span class="folder-size">71 Bytes</span>
+                <span class="folder-files">2 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Powershell\.git\refs\remotes</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 origin</span>
+            <span class="folder-size">71 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\refs\remotes\origin</div>
+    </div>
+    
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 tags</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\.git\refs\tags</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 FileServer</span>
+            <span class="folder-size">66.10 KB</span>
+            <span class="folder-files">10 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Powershell\FileServer</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Zalia balta</span>
+                <span class="folder-size">29.37 KB</span>
+                <span class="folder-files">38 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Zalia balta</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 .git</span>
+                <span class="folder-size">28.02 KB</span>
+                <span class="folder-files">32 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Zalia balta\.git</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 hooks</span>
+            <span class="folder-size">25.22 KB</span>
+            <span class="folder-files">14 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\hooks</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">240 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\info</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 logs</span>
+                <span class="folder-size">344 Bytes</span>
+                <span class="folder-files">2 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Zalia balta\.git\logs</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 refs</span>
+                <span class="folder-size">172 Bytes</span>
+                <span class="folder-files">1 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Zalia balta\.git\logs\refs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 heads</span>
+            <span class="folder-size">172 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\logs\refs\heads</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 objects</span>
+                <span class="folder-size">1.26 KB</span>
+                <span class="folder-files">9 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 00</span>
+            <span class="folder-size">57 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\00</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 11</span>
+            <span class="folder-size">30 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\11</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3f</span>
+            <span class="folder-size">57 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\3f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 90</span>
+            <span class="folder-size">135 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\90</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 c5</span>
+            <span class="folder-size">196 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\c5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e3</span>
+            <span class="folder-size">169 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\e3</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e6</span>
+            <span class="folder-size">231 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\e6</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f0</span>
+            <span class="folder-size">244 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\f0</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f4</span>
+            <span class="folder-size">172 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\f4</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\info</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 pack</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\objects\pack</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 refs</span>
+                <span class="folder-size">41 Bytes</span>
+                <span class="folder-files">1 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Projects\Zalia balta\.git\refs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 heads</span>
+            <span class="folder-size">41 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\refs\heads</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 tags</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\.git\refs\tags</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 nginx</span>
+            <span class="folder-size">306 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Projects\Zalia balta\nginx</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Scripts</span>
+            <span class="folder-size">2.09 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Scripts</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Study</span>
+                <span class="folder-size">105.73 MB</span>
+                <span class="folder-files">5704 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 ai102</span>
+                <span class="folder-size">79.39 MB</span>
+                <span class="folder-files">4645 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 mslearn-ai-foundry</span>
+                <span class="folder-size">79.39 MB</span>
+                <span class="folder-files">4645 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 .git</span>
+                <span class="folder-size">19.31 MB</span>
+                <span class="folder-files">28 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 hooks</span>
+            <span class="folder-size">25.22 KB</span>
+            <span class="folder-files">14 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\hooks</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">240 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\info</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 logs</span>
+                <span class="folder-size">615 Bytes</span>
+                <span class="folder-files">3 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\logs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 refs</span>
+            <span class="folder-size">410 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\logs\refs</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 objects</span>
+                <span class="folder-size">19.27 MB</span>
+                <span class="folder-files">3 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\objects</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\objects\info</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 pack</span>
+            <span class="folder-size">19.27 MB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\objects\pack</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 refs</span>
+                <span class="folder-size">71 Bytes</span>
+                <span class="folder-files">2 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\refs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 heads</span>
+            <span class="folder-size">41 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\refs\heads</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 remotes</span>
+            <span class="folder-size">30 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\refs\remotes</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 tags</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.git\refs\tags</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 .github</span>
+            <span class="folder-size">2.61 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\.github</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 data</span>
+            <span class="folder-size">2.38 MB</span>
+            <span class="folder-files">8 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\data</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Instructions</span>
+                <span class="folder-size">6.57 MB</span>
+                <span class="folder-files">52 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\Instructions</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 archive</span>
+            <span class="folder-size">29.43 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\Instructions\archive</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 media</span>
+            <span class="folder-size">6.45 MB</span>
+            <span class="folder-files">42 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\Instructions\media</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 labfiles</span>
+                <span class="folder-size">51.12 MB</span>
+                <span class="folder-files">4545 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\labfiles</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 chat-app</span>
+                <span class="folder-size">1.09 KB</span>
+                <span class="folder-files">3 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\labfiles\chat-app</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 python</span>
+            <span class="folder-size">1.09 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\labfiles\chat-app\python</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 rag-app</span>
+                <span class="folder-size">51.12 MB</span>
+                <span class="folder-files">4542 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\labfiles\rag-app</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 python</span>
+            <span class="folder-size">51.12 MB</span>
+            <span class="folder-files">4542 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\labfiles\rag-app\python</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 text-files</span>
+            <span class="folder-size">540 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\ai102\mslearn-ai-foundry\text-files</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 az400</span>
+                <span class="folder-size">17.27 MB</span>
+                <span class="folder-files">444 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 .git</span>
+                <span class="folder-size">4.49 MB</span>
+                <span class="folder-files">258 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\.git</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 gk</span>
+            <span class="folder-size">189 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\gk</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 hooks</span>
+            <span class="folder-size">25.22 KB</span>
+            <span class="folder-files">14 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\hooks</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">240 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\info</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 logs</span>
+                <span class="folder-size">1.49 KB</span>
+                <span class="folder-files">3 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\.git\logs</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 refs</span>
+                <span class="folder-size">653 Bytes</span>
+                <span class="folder-files">2 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\.git\logs\refs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 heads</span>
+            <span class="folder-size">653 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\logs\refs\heads</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 objects</span>
+                <span class="folder-size">4.44 MB</span>
+                <span class="folder-files">231 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\.git\objects</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 00</span>
+            <span class="folder-size">5.34 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\00</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 02</span>
+            <span class="folder-size">297 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\02</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 04</span>
+            <span class="folder-size">27.69 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\04</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 05</span>
+            <span class="folder-size">86 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\05</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 08</span>
+            <span class="folder-size">84.97 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\08</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 09</span>
+            <span class="folder-size">290 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\09</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 0a</span>
+            <span class="folder-size">22.75 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\0a</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 0b</span>
+            <span class="folder-size">83 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\0b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 0c</span>
+            <span class="folder-size">108 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\0c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 0d</span>
+            <span class="folder-size">3.31 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\0d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 0e</span>
+            <span class="folder-size">61.29 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\0e</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 0f</span>
+            <span class="folder-size">703 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\0f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 10</span>
+            <span class="folder-size">456 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\10</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 13</span>
+            <span class="folder-size">101 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\13</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 14</span>
+            <span class="folder-size">9.29 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\14</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 15</span>
+            <span class="folder-size">428 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\15</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 16</span>
+            <span class="folder-size">67.08 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\16</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 17</span>
+            <span class="folder-size">63 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\17</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 1a</span>
+            <span class="folder-size">164.90 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\1a</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 1c</span>
+            <span class="folder-size">19.42 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\1c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 20</span>
+            <span class="folder-size">21.53 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\20</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 21</span>
+            <span class="folder-size">3.77 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\21</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 24</span>
+            <span class="folder-size">527 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\24</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 2c</span>
+            <span class="folder-size">138 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\2c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 2d</span>
+            <span class="folder-size">16.54 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\2d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 30</span>
+            <span class="folder-size">18.22 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\30</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 31</span>
+            <span class="folder-size">31.58 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\31</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 33</span>
+            <span class="folder-size">56.51 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\33</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 34</span>
+            <span class="folder-size">145.09 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\34</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 35</span>
+            <span class="folder-size">57.58 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\35</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 36</span>
+            <span class="folder-size">1.04 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\36</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 37</span>
+            <span class="folder-size">28.43 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\37</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 38</span>
+            <span class="folder-size">10.20 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\38</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 39</span>
+            <span class="folder-size">237.39 KB</span>
+            <span class="folder-files">4 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\39</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3a</span>
+            <span class="folder-size">53.28 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\3a</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3b</span>
+            <span class="folder-size">330 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\3b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3d</span>
+            <span class="folder-size">2.96 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\3d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 3e</span>
+            <span class="folder-size">54.37 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\3e</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 40</span>
+            <span class="folder-size">2.43 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\40</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 41</span>
+            <span class="folder-size">32.56 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\41</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 42</span>
+            <span class="folder-size">156 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\42</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 45</span>
+            <span class="folder-size">85 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\45</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 46</span>
+            <span class="folder-size">5.34 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\46</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 47</span>
+            <span class="folder-size">9.27 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\47</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 49</span>
+            <span class="folder-size">8.68 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\49</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 4c</span>
+            <span class="folder-size">463 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\4c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 4d</span>
+            <span class="folder-size">74.05 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\4d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 4f</span>
+            <span class="folder-size">27.38 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\4f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 50</span>
+            <span class="folder-size">14.65 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\50</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 51</span>
+            <span class="folder-size">50 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\51</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 53</span>
+            <span class="folder-size">2.18 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\53</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 54</span>
+            <span class="folder-size">55.38 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\54</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 56</span>
+            <span class="folder-size">22.73 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\56</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 58</span>
+            <span class="folder-size">62.27 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\58</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 59</span>
+            <span class="folder-size">114.16 KB</span>
+            <span class="folder-files">4 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\59</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 5a</span>
+            <span class="folder-size">54.49 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\5a</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 5b</span>
+            <span class="folder-size">6.21 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\5b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 5c</span>
+            <span class="folder-size">764 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\5c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 5d</span>
+            <span class="folder-size">612 Bytes</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\5d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 5e</span>
+            <span class="folder-size">219 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\5e</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 5f</span>
+            <span class="folder-size">32.00 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\5f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 60</span>
+            <span class="folder-size">33.84 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\60</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 62</span>
+            <span class="folder-size">55.49 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\62</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 63</span>
+            <span class="folder-size">17.30 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\63</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 67</span>
+            <span class="folder-size">8.68 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\67</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 68</span>
+            <span class="folder-size">138.01 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\68</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 69</span>
+            <span class="folder-size">104.92 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\69</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 6c</span>
+            <span class="folder-size">3.16 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\6c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 6f</span>
+            <span class="folder-size">28.90 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\6f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 72</span>
+            <span class="folder-size">24.81 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\72</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 75</span>
+            <span class="folder-size">45.77 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\75</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 76</span>
+            <span class="folder-size">14.63 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\76</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 77</span>
+            <span class="folder-size">3.99 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\77</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 78</span>
+            <span class="folder-size">89.35 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\78</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 79</span>
+            <span class="folder-size">42.05 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\79</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 7e</span>
+            <span class="folder-size">141 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\7e</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 7f</span>
+            <span class="folder-size">42.60 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\7f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 80</span>
+            <span class="folder-size">40.75 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\80</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 81</span>
+            <span class="folder-size">317 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\81</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 83</span>
+            <span class="folder-size">14.07 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\83</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 86</span>
+            <span class="folder-size">2.39 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\86</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 87</span>
+            <span class="folder-size">5.08 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\87</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 88</span>
+            <span class="folder-size">111.41 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\88</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 89</span>
+            <span class="folder-size">2.66 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\89</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 8c</span>
+            <span class="folder-size">138.78 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\8c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 8d</span>
+            <span class="folder-size">41.16 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\8d</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 8f</span>
+            <span class="folder-size">2.81 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\8f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 90</span>
+            <span class="folder-size">120.00 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\90</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 92</span>
+            <span class="folder-size">168 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\92</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 93</span>
+            <span class="folder-size">9.27 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\93</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 94</span>
+            <span class="folder-size">58.24 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\94</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 95</span>
+            <span class="folder-size">54 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\95</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 96</span>
+            <span class="folder-size">62.96 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\96</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 98</span>
+            <span class="folder-size">85.23 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\98</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 9a</span>
+            <span class="folder-size">75.24 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\9a</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 9b</span>
+            <span class="folder-size">547 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\9b</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 9c</span>
+            <span class="folder-size">29.99 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\9c</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 9f</span>
+            <span class="folder-size">32.58 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\9f</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a0</span>
+            <span class="folder-size">46.98 KB</span>
+            <span class="folder-files">4 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\a0</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a1</span>
+            <span class="folder-size">146.45 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\a1</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a2</span>
+            <span class="folder-size">89 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\a2</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a3</span>
+            <span class="folder-size">38.40 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\a3</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a4</span>
+            <span class="folder-size">88 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\a4</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a5</span>
+            <span class="folder-size">42 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\a5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 a7</span>
+            <span class="folder-size">119.72 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\a7</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 aa</span>
+            <span class="folder-size">20.26 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\aa</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ad</span>
+            <span class="folder-size">1022 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\ad</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 af</span>
+            <span class="folder-size">75.59 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\af</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b0</span>
+            <span class="folder-size">52 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\b0</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b1</span>
+            <span class="folder-size">40.04 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\b1</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b5</span>
+            <span class="folder-size">310 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\b5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b6</span>
+            <span class="folder-size">6.29 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\b6</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b7</span>
+            <span class="folder-size">45.94 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\b7</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 b9</span>
+            <span class="folder-size">119 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\b9</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 bb</span>
+            <span class="folder-size">62.67 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\bb</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 bc</span>
+            <span class="folder-size">12.52 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\bc</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 bf</span>
+            <span class="folder-size">89.96 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\bf</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 c1</span>
+            <span class="folder-size">23.91 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\c1</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 c2</span>
+            <span class="folder-size">61 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\c2</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 c5</span>
+            <span class="folder-size">22.42 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\c5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 c8</span>
+            <span class="folder-size">7.06 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\c8</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 c9</span>
+            <span class="folder-size">3.24 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\c9</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ca</span>
+            <span class="folder-size">25.42 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\ca</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 cc</span>
+            <span class="folder-size">51 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\cc</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 cd</span>
+            <span class="folder-size">13.20 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\cd</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ce</span>
+            <span class="folder-size">41.19 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\ce</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 cf</span>
+            <span class="folder-size">29.92 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\cf</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 d1</span>
+            <span class="folder-size">54 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\d1</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 d2</span>
+            <span class="folder-size">885 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\d2</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 d4</span>
+            <span class="folder-size">88.76 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\d4</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 d5</span>
+            <span class="folder-size">19.58 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\d5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 d7</span>
+            <span class="folder-size">31.33 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\d7</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 d8</span>
+            <span class="folder-size">2.54 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\d8</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 da</span>
+            <span class="folder-size">23.85 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\da</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 db</span>
+            <span class="folder-size">11.27 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\db</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 dc</span>
+            <span class="folder-size">666 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\dc</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 df</span>
+            <span class="folder-size">16.27 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\df</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e2</span>
+            <span class="folder-size">165 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\e2</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e3</span>
+            <span class="folder-size">48.33 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\e3</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e4</span>
+            <span class="folder-size">14.79 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\e4</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e5</span>
+            <span class="folder-size">16.75 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\e5</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e6</span>
+            <span class="folder-size">171 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\e6</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 e7</span>
+            <span class="folder-size">41.99 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\e7</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ec</span>
+            <span class="folder-size">772 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\ec</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ed</span>
+            <span class="folder-size">16.86 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\ed</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ef</span>
+            <span class="folder-size">2.88 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\ef</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f1</span>
+            <span class="folder-size">81.15 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\f1</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 f9</span>
+            <span class="folder-size">25.37 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\f9</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 fd</span>
+            <span class="folder-size">4.56 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\fd</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ff</span>
+            <span class="folder-size">603 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\ff</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\info</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 pack</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\objects\pack</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 refs</span>
+                <span class="folder-size">82 Bytes</span>
+                <span class="folder-files">2 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\.git\refs</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 heads</span>
+            <span class="folder-size">82 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\refs\heads</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 tags</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\.git\refs\tags</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 bin</span>
+                <span class="folder-size">527.56 KB</span>
+                <span class="folder-files">9 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\bin</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Debug</span>
+                <span class="folder-size">527.56 KB</span>
+                <span class="folder-files">9 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\bin\Debug</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 net10.0</span>
+            <span class="folder-size">527.56 KB</span>
+            <span class="folder-files">9 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\bin\Debug\net10.0</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Controllers</span>
+            <span class="folder-size">561 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\Controllers</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Models</span>
+            <span class="folder-size">176 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\Models</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 obj</span>
+                <span class="folder-size">2.93 MB</span>
+                <span class="folder-files">99 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\obj</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Debug</span>
+                <span class="folder-size">2.87 MB</span>
+                <span class="folder-files">94 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\obj\Debug</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 net10.0</span>
+                <span class="folder-size">2.87 MB</span>
+                <span class="folder-files">94 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\obj\Debug\net10.0</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 compressed</span>
+            <span class="folder-size">1.79 MB</span>
+            <span class="folder-files">64 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\obj\Debug\net10.0\compressed</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ref</span>
+            <span class="folder-size">14.50 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\obj\Debug\net10.0\ref</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 refint</span>
+            <span class="folder-size">14.50 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\obj\Debug\net10.0\refint</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 scopedcss</span>
+            <span class="folder-size">3.20 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\obj\Debug\net10.0\scopedcss</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 staticwebassets</span>
+            <span class="folder-size">0 Bytes</span>
+            <span class="folder-files">0 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\obj\Debug\net10.0\staticwebassets</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Properties</span>
+            <span class="folder-size">642 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\Properties</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Views</span>
+                <span class="folder-size">4.77 KB</span>
+                <span class="folder-files">8 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\Views</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Home</span>
+            <span class="folder-size">365 Bytes</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\Views\Home</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Shared</span>
+            <span class="folder-size">4.29 KB</span>
+            <span class="folder-files">4 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\Views\Shared</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 wwwroot</span>
+                <span class="folder-size">9.34 MB</span>
+                <span class="folder-files">63 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\wwwroot</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 css</span>
+            <span class="folder-size">667 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\wwwroot\css</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 js</span>
+            <span class="folder-size">231 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\wwwroot\js</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 lib</span>
+                <span class="folder-size">9.33 MB</span>
+                <span class="folder-files">60 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\wwwroot\lib</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 bootstrap</span>
+                <span class="folder-size">8.28 MB</span>
+                <span class="folder-files">45 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\bootstrap</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 dist</span>
+            <span class="folder-size">8.28 MB</span>
+            <span class="folder-files">44 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\bootstrap\dist</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 jquery</span>
+                <span class="folder-size">896.62 KB</span>
+                <span class="folder-files">7 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\jquery</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 dist</span>
+            <span class="folder-size">895.53 KB</span>
+            <span class="folder-files">6 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\jquery\dist</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 jquery-validation</span>
+                <span class="folder-size">150.51 KB</span>
+                <span class="folder-files">5 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\jquery-validation</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 dist</span>
+            <span class="folder-size">149.42 KB</span>
+            <span class="folder-files">4 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\jquery-validation\dist</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 jquery-validation-unobtrusive</span>
+                <span class="folder-size">25.73 KB</span>
+                <span class="folder-files">3 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\jquery-validation-unobtrusive</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 dist</span>
+            <span class="folder-size">24.62 KB</span>
+            <span class="folder-files">2 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400\wwwroot\lib\jquery-validation-unobtrusive\dist</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 az400New</span>
+                <span class="folder-size">9.06 MB</span>
+                <span class="folder-files">615 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 Git</span>
+                <span class="folder-size">9.06 MB</span>
+                <span class="folder-files">615 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New\Git</div>
+
+            <div class="children">
+                
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 eShopOnWeb</span>
+                <span class="folder-size">9.06 MB</span>
+                <span class="folder-files">615 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 .ado</span>
+            <span class="folder-size">17.21 KB</span>
+            <span class="folder-files">11 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.ado</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 .devcontainer</span>
+            <span class="folder-size">1.83 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.devcontainer</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 .git</span>
+                <span class="folder-size">3.98 MB</span>
+                <span class="folder-files">48 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.git</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 gk</span>
+            <span class="folder-size">211 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.git\gk</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 hooks</span>
+            <span class="folder-size">25.22 KB</span>
+            <span class="folder-files">14 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.git\hooks</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 info</span>
+            <span class="folder-size">240 Bytes</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.git\info</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 logs</span>
+            <span class="folder-size">1.79 KB</span>
+            <span class="folder-files">6 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.git\logs</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 objects</span>
+            <span class="folder-size">3.90 MB</span>
+            <span class="folder-files">13 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.git\objects</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 refs</span>
+            <span class="folder-size">194 Bytes</span>
+            <span class="folder-files">5 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.git\refs</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 .github</span>
+                <span class="folder-size">4.85 KB</span>
+                <span class="folder-files">4 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.github</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 workflows</span>
+            <span class="folder-size">4.64 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.github\workflows</div>
+    </div>
+    
+            </div>
+        </details>
+        
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 .images</span>
+            <span class="folder-size">39.19 KB</span>
+            <span class="folder-files">1 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.images</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 .vscode</span>
+            <span class="folder-size">2.84 KB</span>
+            <span class="folder-files">3 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\.vscode</div>
+    </div>
+    
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 infra</span>
+                <span class="folder-size">30.95 KB</span>
+                <span class="folder-files">14 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\infra</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 core</span>
+            <span class="folder-size">8.16 KB</span>
+            <span class="folder-files">5 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\infra\core</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 src</span>
+                <span class="folder-size">4.56 MB</span>
+                <span class="folder-files">431 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\src</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 ApplicationCore</span>
+            <span class="folder-size">28.14 KB</span>
+            <span class="folder-files">46 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\src\ApplicationCore</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 BlazorAdmin</span>
+            <span class="folder-size">1.02 MB</span>
+            <span class="folder-files">60 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\src\BlazorAdmin</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 BlazorShared</span>
+            <span class="folder-size">27.16 KB</span>
+            <span class="folder-files">31 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\src\BlazorShared</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Infrastructure</span>
+            <span class="folder-size">151.07 KB</span>
+            <span class="folder-files">41 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\src\Infrastructure</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 PublicApi</span>
+            <span class="folder-size">107.55 KB</span>
+            <span class="folder-files">52 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\src\PublicApi</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 Web</span>
+            <span class="folder-size">3.24 MB</span>
+            <span class="folder-files">201 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\src\Web</div>
+    </div>
+    
+            </div>
+        </details>
+        
+        <details class="folder">
+            <summary>
+                <span class="folder-name">📁 tests</span>
+                <span class="folder-size">392.21 KB</span>
+                <span class="folder-files">86 files</span>
+                <span class="folder-status success">
+                    Success
+                </span>
+            </summary>
+
+            <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\tests</div>
+
+            <div class="children">
+                
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 FunctionalTests</span>
+            <span class="folder-size">27.29 KB</span>
+            <span class="folder-files">18 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\tests\FunctionalTests</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 IntegrationTests</span>
+            <span class="folder-size">111.38 KB</span>
+            <span class="folder-files">14 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\tests\IntegrationTests</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 PublicApiIntegrationTests</span>
+            <span class="folder-size">125.75 KB</span>
+            <span class="folder-files">19 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\tests\PublicApiIntegrationTests</div>
+    </div>
+    
+    <div class="folder leaf">
+        <div class="leaf-row">
+            <span class="folder-name">📁 UnitTests</span>
+            <span class="folder-size">127.80 KB</span>
+            <span class="folder-files">35 files</span>
+            <span class="folder-status success">
+                Success
+            </span>
+        </div>
+
+        <div class="folder-path">C:\Work\Study\az400New\Git\eShopOnWeb\tests\UnitTests</div>
+    </div>
+    
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+            </div>
+        </details>
+        
+
+</div>
+
+<script>
+
+function expandAll() {
+    document.querySelectorAll("details.folder").forEach(
+        folder => folder.open = true
+    );
+}
+
+function collapseAll() {
+    document.querySelectorAll("details.folder").forEach(
+        folder => folder.open = false
+    );
+}
+
+</script>
+
+</body>
+</html>
