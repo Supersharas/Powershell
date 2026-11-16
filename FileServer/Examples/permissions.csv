@@ -1,0 +1,13 @@
+Type	Path	FileName	Identity	Permissions	AccessType	Inherited
+FolderPermission	E:\Shares\Hub Drive\Admin		S-1-5-21-2645410826-1915345771-1379613503-6663	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Admin		NT AUTHORITY\SYSTEM	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Admin		S-1-5-21-2645410826-1915345771-1379613503-6809	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Admin		CL\master	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Admin		BUILTIN\Administrators	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Feedback		S-1-5-21-2645410826-1915345771-1379613503-6663	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Feedback		NT AUTHORITY\SYSTEM	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Feedback		S-1-5-21-2645410826-1915345771-1379613503-6809	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Feedback		CL\master	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Feedback		BUILTIN\Administrators	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Languages across Consortium		S-1-5-21-2645410826-1915345771-1379613503-6663	FullControl	Allow	TRUE
+FolderPermission	E:\Shares\Hub Drive\Languages across Consortium		NT AUTHORITY\SYSTEM	FullControl	Allow	TRUE
