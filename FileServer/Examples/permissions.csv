@@ -1,13 +1,25 @@
-Type	Path	FileName	Identity	Permissions	AccessType	Inherited
-FolderPermission	E:\Shares\Hub Drive\Admin		S-1-5-21-2645410826-1915345771-1379613503-6663	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Admin		NT AUTHORITY\SYSTEM	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Admin		S-1-5-21-2645410826-1915345771-1379613503-6809	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Admin		CL\master	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Admin		BUILTIN\Administrators	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Feedback		S-1-5-21-2645410826-1915345771-1379613503-6663	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Feedback		NT AUTHORITY\SYSTEM	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Feedback		S-1-5-21-2645410826-1915345771-1379613503-6809	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Feedback		CL\master	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Feedback		BUILTIN\Administrators	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Languages across Consortium		S-1-5-21-2645410826-1915345771-1379613503-6663	FullControl	Allow	TRUE
-FolderPermission	E:\Shares\Hub Drive\Languages across Consortium		NT AUTHORITY\SYSTEM	FullControl	Allow	TRUE
+Path	Status	Owner	AllPermissions	Error
+E:\Shares\Hub Drive\Referrals	Inheritance Disabled	BUILTIN\Administrators	CL\External Group (ReadAndExecute, Synchronize, Explicit) | CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\All Referrals	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Audit	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\On Hold	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Signposted	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\All Referrals\Closed Referrals	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Referral Agencies\ASC	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Referral Agencies\Community Links	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Referral Agencies\Leeds Mind	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\leeds Mind Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Referral Agencies\LFHA	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\LFHA Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Referral Agencies\LIHH	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\LIHH Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Referral Agencies\St Annes	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\St Annes Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Referrals\Referral Agencies\Touchstone	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\Touchstone Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\Accommodation Gateway	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\Community Links	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\Hub Dashboard	Unique Domain Permissions	BUILTIN\Administrators	CL\master (FullControl, Explicit) | CL\master (FullControl, Inherited)	None
+E:\Shares\Hub Drive\Reporting\Hub KPIs	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\Hub Reporting + Q&P	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\Leeds Mind	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\leeds Mind Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\LIHH	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\LIHH Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\St Annes	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\St Annes Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\Touchstone	Inheritance Disabled	BUILTIN\Administrators	CL\HUB Group (Modify, Synchronize, Explicit) | CL\Touchstone Security Group (Modify, Synchronize, Explicit)	None
+E:\Shares\Hub Drive\Reporting\Archive\LFHA	Inheritance Disabled	BUILTIN\Administrators	CL\LFHA Security Group (ReadAndExecute, Synchronize, Explicit)	None
+
